@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SparkVibe Studio - Creative Agency</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f9fafb;
+        }
+
+        .hero-bg {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .feature-card, .testimonial-card, .portfolio-card, .team-card, .blog-card {
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .feature-card:hover, .testimonial-card:hover, .portfolio-card:hover, .team-card:hover, .blog-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #ec4899;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        .portfolio-img {
+            background-size: cover;
+            background-position: center;
+            transform: translateY(0);
+            transition: transform 0.1s linear;
+        }
+
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background-color: #ec4899;
+            z-index: 30;
+            transition: width 0.2s ease;
+        }
+
+        #back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ec4899;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        #back-to-top:hover {
+            opacity: 0.8;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 40;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress Indicator -->
+    <div id="scroll-progress"></div>
+
+    <!-- Back-to-Top Button -->
+    <div id="back-to-top" title="Back to Top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full z-20 top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="text-2xl font-bold text-pink-500">SparkVibe</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#home" class="nav-link px-4 py-2 text-sm font-medium text-gray-800 hover:text-pink-500">Home</a>
+                    <a href="#features" class="nav-link px-4 py-2 text-sm font-medium text-gray-800 hover:text-pink-500">Features</a>
+                    <a href="#portfolio" class="nav-link px-4 py-2 text-sm font-medium text-gray-800 hover:text-pink-500">Portfolio</a>
+                    <a href="#team" class="nav-link px-4 py-2 text-sm font-medium text-gray-800 hover:text-pink-500">Team</a>
+                    <a href="#testimonials" class="nav-link px-4 py-2 text-sm font-medium text-gray-800 hover:text-pink-500">Testimonials</a>
+                    <a href="#blog" class="nav-link px-4 py-2 text-sm font-medium text-gray-800 hover:text-pink-500">Blog</a>
+                    <a href="#contact" class="nav-link px-4 py-2 text-sm font-medium text-gray-800 hover:text-pink-500">Contact</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="menu-btn" class="text-gray-600 hover:text-pink-500 focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg">
+            <div class="px-4 pt-4 pb-3 space-y-2">
+                <a href="#home" class="block px-4 py-2 text-base font-medium text-gray-800 hover:text-pink-500 hover:bg-pink-50 rounded-lg">Home</a>
+                <a href="#features" class="block px-4 py-2 text-base font-medium text-gray-800 hover:text-pink-500 hover:bg-pink-50 rounded-lg">Features</a>
+                <a href="#portfolio" class="block px-4 py-2 text-base font-medium text-gray-800 hover:text-pink-500 hover:bg-pink-50 rounded-lg">Portfolio</a>
+                <a href="#team" class="block px-4 py-2 text-base font-medium text-gray-800 hover:text-pink-500 hover:bg-pink-50 rounded-lg">Team</a>
+                <a href="#testimonials" class="block px-4 py-2 text-base font-medium text-gray-800 hover:text-pink-500 hover:bg-pink-50 rounded-lg">Testimonials</a>
+                <a href="#blog" class="block px-4 py-2 text-base font-medium text-gray-800 hover:text-pink-500 hover:bg-pink-50 rounded-lg">Blog</a>
+                <a href="#contact" class="block px-4 py-2 text-base font-medium text-gray-800 hover:text-pink-500 hover:bg-pink-50 rounded-lg">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg text-white pt-24 pb-20 px-4 sm:pt-32 min-h-screen flex items-center">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 animate__animated animate__fadeInDown">Ignite Your Brand with SparkVibe Studio</h1>
+            <p class="text-lg sm:text-xl mb-8 max-w-2xl mx-auto animate__animated animate__fadeIn" style="animation-delay: 0.2s;">We craft stunning digital experiences that captivate, engage, and convert. Let’s bring your vision to life.</p>
+            <a href="#contact" class="cta-button bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full font-semibold text-lg animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 px-4 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl sm:text-4xl font-bold text-center mb-16 text-gray-800 animate__animated animate__fadeIn">What We Offer</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="feature-card bg-gray-50 p-8 rounded-2xl shadow-lg text-center">
+                    <div class="bg-pink-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-paint-brush text-pink-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Creative Design</h3>
+                    <p class="text-gray-600">Eye-catching visuals and intuitive layouts tailored to your brand’s unique identity.</p>
+                </div>
+                <div class="feature-card bg-gray-50 p-8 rounded-2xl shadow-lg text-center">
+                    <div class="bg-pink-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-code text-pink-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Web Development</h3>
+                    <p class="text-gray-600">Fast, responsive, and scalable websites built with cutting-edge technologies.</p>
+                </div>
+                <div class="feature-card bg-gray-50 p-8 rounded-2xl shadow-lg text-center">
+                    <div class="bg-pink-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-rocket text-pink-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Digital Marketing</h3>
+                    <p class="text-gray-600">Strategic campaigns to boost your online presence and drive conversions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-20 px-4 bg-gray-100">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl sm:text-4xl font-bold text-center mb-16 text-gray-800 animate__animated animate__fadeIn">Our Work</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="portfolio-card bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer" data-modal="project1">
+                    <div class="h-48 portfolio-img" style="background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');"></div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">E-commerce Redesign</h3>
+                        <p class="text-gray-600">A modern, user-friendly online store for a retail brand.</p>
+                    </div>
+                </div>
+                <div class="portfolio-card bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer" data-modal="project2">
+                    <div class="h-48 portfolio-img" style="background-image: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');"></div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Startup Landing Page</h3>
+                        <p class="text-gray-600">A vibrant landing page for a tech startup.</p>
+                    </div>
+                </div>
+                <div class="portfolio-card bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer" data-modal="project3">
+                    <div class="h-48 portfolio-img" style="background-image: url('https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');"></div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Corporate Website</h3>
+                        <p class="text-gray-600">A professional site for a consulting firm.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Modals -->
+    <div id="project1" class="modal">
+        <div class="modal-content animate__animated animate__zoomIn">
+            <span class="close-modal">&times;</span>
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">E-commerce Redesign</h3>
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Project" class="w-full h-64 object-cover rounded-lg mb-4">
+            <p class="text-gray-600 mb-4">Revamped an online store with a focus on user experience, featuring a sleek design, fast load times, and seamless checkout.</p>
+            <a href="#" class="text-pink-500 hover:text-pink-600 font-semibold">View Live Site</a>
+        </div>
+    </div>
+    <div id="project2" class="modal">
+        <div class="modal-content animate__animated animate__zoomIn">
+            <span class="close-modal">&times;</span>
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">Startup Landing Page</h3>
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Project" class="w-full h-64 object-cover rounded-lg mb-4">
+            <p class="text-gray-600 mb-4">Designed a vibrant landing page to showcase a tech startup’s innovative product, driving user engagement.</p>
+            <a href="#" class="text-pink-500 hover:text-pink-600 font-semibold">View Live Site</a>
+        </div>
+    </div>
+    <div id="project3" class="modal">
+        <div class="modal-content animate__animated animate__zoomIn">
+            <span class="close-modal">&times;</span>
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">Corporate Website</h3>
+            <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Project" class="w-full h-64 object-cover rounded-lg mb-4">
+            <p class="text-gray-600 mb-4">Developed a professional website for a consulting firm, emphasizing clarity and trust.</p>
+            <a href="#" class="text-pink-500 hover:text-pink-600 font-semibold">View Live Site</a>
+        </div>
+    </div>
+
+    <!-- Team Section -->
+    <section id="team" class="py-20 px-4 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl sm:text-4xl font-bold text-center mb-16 text-gray-800 animate__animated animate__fadeIn">Meet Our Team</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="team-card bg-gray-50 p-6 rounded-2xl shadow-lg text-center">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Team Member" class="w-24 h-24 rounded-full mx-auto mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Emma Wilson</h3>
+                    <p class="text-gray-600 mb-4">Creative Director</p>
+                    <div class="flex justify-center space-x-4">
+                        <a href="#" class="text-pink-500 hover:text-pink-600"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-pink-500 hover:text-pink-600"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="team-card bg-gray-50 p-6 rounded-2xl shadow-lg text-center">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Team Member" class="w-24 h-24 rounded-full mx-auto mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">James Lee</h3>
+                    <p class="text-gray-600 mb-4">Lead Developer</p>
+                    <div class="flex justify-center space-x-4">
+                        <a href="#" class="text-pink-500 hover:text-pink-600"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-pink-500 hover:text-pink-600"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="team-card bg-gray-50 p-6 rounded-2xl shadow-lg text-center">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Team Member" class="w-24 h-24 rounded-full mx-auto mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Sophia Patel</h3>
+                    <p class="text-gray-600 mb-4">Marketing Specialist</p>
+                    <div class="flex justify-center space-x-4">
+                        <a href="#" class="text-pink-500 hover:text-pink-600"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-pink-500 hover:text-pink-600"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="team-card bg-gray-50 p-6 rounded-2xl shadow-lg text-center">
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Team Member" class="w-24 h-24 rounded-full mx-auto mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Liam Brown</h3>
+                    <p class="text-gray-600 mb-4">UX Designer</p>
+                    <div class="flex justify-center space-x-4">
+                        <a href="#" class="text-pink-500 hover:text-pink-600"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-pink-500 hover:text-pink-600"><i class="fab fa-dribbble"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call-to-Action Banner -->
+    <section class="py-16 px-4 bg-pink-500 text-white">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-6 animate__animated animate__fadeIn">Ready to Transform Your Brand?</h2>
+            <p class="text-lg mb-8 max-w-xl mx-auto animate__animated animate__fadeIn" style="animation-delay: 0.2s;">Join hundreds of satisfied clients and let’s create something extraordinary together.</p>
+            <a href="#contact" class="cta-button bg-white text-pink-500 hover:bg-gray-100 px-8 py-4 rounded-full font-semibold text-lg animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">Contact Us Now</a>
+        </div>
+    </section>
+
+    <!-- Testimonial Section -->
+    <section id="testimonials" class="py-20 px-4 bg-gray-100">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl sm:text-4xl font-bold text-center mb-16 text-gray-800 animate__animated animate__fadeIn">What Our Clients Say</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="testimonial-card bg-white p-8 rounded-2xl shadow-lg">
+                    <p class="text-gray-600 mb-6 italic">“SparkVibe transformed our online presence with a stunning website and effective marketing strategy.”</p>
+                    <div class="flex items-center">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Client" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Sarah Johnson</h4>
+                            <p class="text-sm text-gray-500">CEO, BrightFuture</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card bg-white p-8 rounded-2xl shadow-lg">
+                    <p class="text-gray-600 mb-6 italic">“Their creative designs and technical expertise made our project a huge success.”</p>
+                    <div class="flex items-center">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Client" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Michael Chen</h4>
+                            <p class="text-sm text-gray-500">Founder, InnovateTech</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card bg-white p-8 rounded-2xl shadow-lg">
+                    <p class="text-gray-600 mb-6 italic">“Working with SparkVibe was a game-changer. Their attention to detail is unmatched.”</p>
+                    <div class="flex items-center">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Client" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Emily Davis</h4>
+                            <p class="text-sm text-gray-500">Marketing Director, GrowEasy</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Preview Section -->
+    <section id="blog" class="py-20 px-4 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl sm:text-4xl font-bold text-center mb-16 text-gray-800 animate__animated animate__fadeIn">Latest Insights</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="blog-card bg-gray-50 p-6 rounded-2xl shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Blog Post" class="w-full h-40 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Top Web Design Trends for 2025</h3>
+                    <p class="text-gray-600 mb-4">Discover the latest trends shaping the future of web design.</p>
+                    <a href="#" class="text-pink-500 hover:text-pink-600 font-semibold">Read More</a>
+                </div>
+                <div class="blog-card bg-gray-50 p-6 rounded-2xl shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Blog Post" class="w-full h-40 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Boosting Conversions with UX</h3>
+                    <p class="text-gray-600 mb-4">Learn how user experience can drive your business success.</p>
+                    <a href="#" class="text-pink-500 hover:text-pink-600 font-semibold">Read More</a>
+                </div>
+                <div class="blog-card bg-gray-50 p-6 rounded-2xl shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Blog Post" class="w-full h-40 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">SEO Strategies That Work</h3>
+                    <p class="text-gray-600 mb-4">Effective SEO tips to rank higher in search results.</p>
+                    <a href="#" class="text-pink-500 hover:text-pink-600 font-semibold">Read More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-4 bg-gray-100">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl sm:text-4xl font-bold text-center mb-16 text-gray-800 animate__animated animate__fadeIn">Let’s Work Together</h2>
+            <div class="flex flex-col lg:flex-row gap-12">
+                <div class="lg:w-1/2">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-6 animate__animated animate__fadeInLeft">Ready to Start Your Project?</h3>
+                    <p class="text-gray-600 mb-8 text-lg animate__animated animate__fadeIn" style="animation-delay: 0.2s;">
+                        Whether you need a new website, a brand refresh, or a marketing boost, we’re here to help. Reach out today!
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex items-center animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+                            <i class="fas fa-envelope text-pink-500 text-xl mr-4"></i>
+                            <a href="mailto:hello@sparkvibe.studio" class="text-gray-600 hover:text-pink-500">hello@sparkvibe.studio</a>
+                        </div>
+                        <div class="flex items-center animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
+                            <i class="fas fa-phone-alt text-pink-500 text-xl mr-4"></i>
+                            <a href="tel:+1234567890" class="text-gray-600 hover:text-pink-500">+1 (234) 567-890</a>
+                        </div>
+                        <div class="flex items-center animate__animated animate__fadeInUp" style="animation-delay: 0.8s;">
+                            <i class="fas fa-map-marker-alt text-pink-500 text-xl mr-4"></i>
+                            <p class="text-gray-600">New York, NY</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2">
+                    <form id="contact-form" class="bg-white p-8 rounded-2xl shadow-lg animate__animated animate__fadeInRight">
+                        <div class="mb-6">
+                            <label for="name" class="block text-gray-700 font-medium mb-2">Name</label>
+                            <input type="text" id="name" name="name" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="Your Name" required>
+                            <p class="text-red-500 text-sm mt-1 hidden" id="name-error">Name is required</p>
+                        </div>
+                        <div class="mb-6">
+                            <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
+                            <input type="email" id="email" name="email" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="Your Email" required>
+                            <p class="text-red-500 text-sm mt-1 hidden" id="email-error">Valid email is required</p>
+                        </div>
+                        <div class="mb-6">
+                            <label for="message" class="block text-gray-700 font-medium mb-2">Message</label>
+                            <textarea id="message" name="message" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" rows="5" placeholder="Tell us about your project" required></textarea>
+                            <p class="text-red-500 text-sm mt-1 hidden" id="message-error">Message is required</p>
+                        </div>
+                        <button type="submit" class="w-full bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg font-semibold cta-button">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="mb-4">© 2025 SparkVibe Studio. All rights reserved.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="text-gray-400 hover:text-pink-500"><i class="fab fa-twitter text-lg"></i></a>
+                <a href="#" class="text-gray-400 hover:text-pink-500"><i class="fab fa-linkedin-in text-lg"></i></a>
+                <a href="#" class="text-gray-400 hover:text-pink-500"><i class="fab fa-instagram text-lg"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Scroll Progress Indicator
+        const scrollProgress = document.getElementById('scroll-progress');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            scrollProgress.style.width = `${scrollPercent}%`;
+        });
+
+        // Back-to-Top Button
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            backToTop.style.display = window.scrollY > 300 ? 'flex' : 'none';
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Portfolio Parallax
+        const portfolioImages = document.querySelectorAll('.portfolio-img');
+        window.addEventListener('scroll', () => {
+            portfolioImages.forEach(img => {
+                const rect = img.getBoundingClientRect();
+                const scrollPosition = window.scrollY;
+                const offset = rect.top + scrollPosition;
+                const speed = 0.2;
+                const yPos = (scrollPosition - offset) * speed;
+                img.style.transform = `translateY(${yPos}px)`;
+            });
+        });
+
+        // Portfolio Modals
+        const portfolioCards = document.querySelectorAll('.portfolio-card');
+        const modals = document.querySelectorAll('.modal');
+        const closeModals = document.querySelectorAll('.close-modal');
+
+        portfolioCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const modalId = card.getAttribute('data-modal');
+                document.getElementById(modalId).style.display = 'flex';
+            });
+        });
+
+        closeModals.forEach(close => {
+            close.addEventListener('click', () => {
+                modals.forEach(modal => modal.style.display = 'none');
+            });
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                modals.forEach(modal => modal.style.display = 'none');
+            }
+        });
+
+        // Form Validation
+        const form = document.getElementById('contact-form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let isValid = true;
+
+            const name = document.getElementById('name');
+            const email = document.getElementById('email');
+            const message = document.getElementById('message');
+            const nameError = document.getElementById('name-error');
+            const emailError = document.getElementById('email-error');
+            const messageError = document.getElementById('message-error');
+
+            nameError.classList.add('hidden');
+            emailError.classList.add('hidden');
+            messageError.classList.add('hidden');
+
+            if (!name.value.trim()) {
+                nameError.classList.remove('hidden');
+                isValid = false;
+            }
+            if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+                emailError.classList.remove('hidden');
+                isValid = false;
+            }
+            if (!message.value.trim()) {
+                messageError.classList.remove('hidden');
+                isValid = false;
+            }
+
+            if (isValid) {
+                alert('Form submitted successfully! (Demo: No backend connected)');
+                form.reset();
+            }
+        });
+
+        // Intersection Observer for Animations
+        const animateElements = document.querySelectorAll('.feature-card, .testimonial-card, .portfolio-card, .team-card, .blog-card, [class*="animate__"]');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = entry.target;
+                    if (target.classList.contains('feature-card') || target.classList.contains('portfolio-card') || target.classList.contains('testimonial-card') || target.classList.contains('team-card') || target.classList.contains('blog-card')) {
+                        target.classList.add('animate__animated', 'animate__fadeInUp');
+                    }
+                    observer.unobserve(target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        animateElements.forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
